@@ -1,17 +1,12 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Noto_Sans } from "next/font/google";
 import "./globals.css";
-import Navbar from "../components/shared/Navbar";
+import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import NextAuthProvider from "@/providers/NextAuthProvider";
+import { Toaster } from "react-hot-toast";
+import ThemeProvider from "@/components/utilities/ThemeProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const notoSans = Noto_Sans({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Create Next App",
@@ -20,15 +15,22 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+        className={`${notoSans.className} antialiased flex flex-col min-h-screen transition-colors`}
       >
-        <header>
-          <Navbar />
-        </header>
-        <main className="grow">{children}</main>
-        <Footer />
+        <NextAuthProvider>
+          <ThemeProvider>
+            <header>
+              <Navbar />
+            </header>
+
+            <main className="grow">{children}</main>
+
+            <Toaster position="bottom-center" />
+            <Footer />
+          </ThemeProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

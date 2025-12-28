@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "../utilities/Logo";
 import Link from "next/link";
+import ThemeSwitcher from "../utilities/ThemeSwitcher";
 
 const Navbar = () => {
   return (
@@ -13,6 +14,7 @@ const Navbar = () => {
         <Link href="/contact">Contact</Link>
         <Link href="/blog">Blog</Link>
       </div>
+      <ThemeSwitcher />
     </div>
   );
 };
