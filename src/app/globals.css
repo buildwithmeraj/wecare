@@ -70,3 +70,15 @@
   --depth: 1;
   --noise: 0;
 }
+
+h2 {
+  @apply text-3xl font-bold my-1;
+}
+
+label:not(.swap) {
+  @apply block w-full;
+}
+
+.btn-error {
+  @apply text-white;
+}
