@@ -1,8 +1,8 @@
 "use client";
 
-import { DeleteService } from "@/actions/DeleteService";
-import { ServicesList } from "@/actions/servicesList";
-import { UpdateService } from "@/actions/UpdateService";
+import { DeleteService } from "@/actions/server/DeleteService";
+import { ServicesList } from "@/actions/server/servicesList";
+import { UpdateService } from "@/actions/server/UpdateService";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -31,7 +31,7 @@ const AdminDashboard = () => {
   };
   const fetchServices = async () => {
     const data = await ServicesList();
-    setServices(JSON.parse(JSON.stringify(data)));
+    setServices(data);
     setLoading(false);
   };
   const handleDeleteService = async (id) => {

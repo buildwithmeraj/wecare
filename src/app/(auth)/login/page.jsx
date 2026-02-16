@@ -43,7 +43,7 @@ export default function Login() {
         toast.error("Invalid email or password");
       } else {
         toast.success("Login successful!");
-        setInterval(location.reload(), 2000);
+        router.push("/profile");
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -144,7 +144,7 @@ export default function Login() {
             </button>
 
             <p className="text-center text-sm mt-4">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link
                 href="/register"
                 className="link link-primary font-semibold"

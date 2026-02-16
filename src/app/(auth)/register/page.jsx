@@ -7,7 +7,7 @@ import { ImGoogle } from "react-icons/im";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { FaUserPlus } from "react-icons/fa6";
-import { registerUser } from "@/actions/auth";
+import { registerUser } from "@/actions/server/auth";
 
 export default function Register() {
   const router = useRouter();
@@ -52,6 +52,9 @@ export default function Register() {
 
     try {
       const response = await registerUser(formData);
+      if (!response?.success) {
+        throw new Error(response?.message || "Registration failed");
+      }
 
       toast.success("Account created! Logging you in...");
 
