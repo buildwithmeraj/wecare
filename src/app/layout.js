@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
               <Navbar />
             </header>
 
-            <main className="grow my-3 mx-4">{children}</main>
+            <main className="grow my-3 pt-12 mx-4">{children}</main>
 
             <Toaster position="bottom-center" />
             <Footer />
