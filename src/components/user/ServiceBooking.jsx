@@ -4,8 +4,10 @@ import { BookService } from "@/actions/server/BookService";
 import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
+  const router = useRouter();
   const [serviceType, setServiceType] = useState("perHour");
   const [region, setRegion] = useState("");
   const [district, setDistrict] = useState("");
@@ -34,33 +36,17 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
     [duration, pricePerUnit]
   );
 
-  // Parse location data to create hierarchical structure
   const locationData = useMemo(() => {
     if (!areas || !Array.isArray(areas)) return [];
-
-    const parsed = [];
-
-    areas.forEach((item) => {
-      const regionName = item.region;
-      const coveredAreas = item.covered_area || [];
-
-      coveredAreas.forEach((areaName) => {
-        // Parse area name - could be formats like:
-        // "Uttara, Dhaka" or just "Uttara"
-        // We'll treat the area name as district for now
-        // You can customize parsing based on your actual format
-
-        parsed.push({
-          region: regionName,
-          district: areaName, // Using area name as district
-          city: areaName, // Using area name as city
-          area: areaName,
-          originalData: item,
-        });
-      });
-    });
-
-    return parsed;
+    return areas.map((item) => ({
+      region: item.region,
+      district: item.district,
+      city: item.city,
+      covered_area: Array.isArray(item.covered_area) ? item.covered_area : [],
+      latitude: item.latitude,
+      longitude: item.longitude,
+      flowchart: item.flowchart,
+    }));
   }, [areas]);
 
   // ---------------- Cascading Location Logic ----------------
@@ -71,9 +57,8 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
 
   const districts = useMemo(() => {
     if (!region || !locationData.length) return [];
-
     const filtered = locationData.filter((item) => item.region === region);
-    return [...new Set(filtered.map((item) => item.district))];
+    return [...new Set(filtered.map((item) => item.district).filter(Boolean))];
   }, [locationData, region]);
 
   const cities = useMemo(() => {
@@ -82,7 +67,7 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
     const filtered = locationData.filter(
       (item) => item.region === region && item.district === district
     );
-    return [...new Set(filtered.map((item) => item.city))];
+    return [...new Set(filtered.map((item) => item.city).filter(Boolean))];
   }, [locationData, region, district]);
 
   const coveredAreas = useMemo(() => {
@@ -94,13 +79,19 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
         item.district === district &&
         item.city === city
     );
-    return [...new Set(filtered.map((item) => item.area))];
+    return [
+      ...new Set(
+        filtered.flatMap((item) => item.covered_area || []).filter(Boolean)
+      ),
+    ];
   }, [locationData, region, district, city]);
 
   const selectedLocation = useMemo(() => {
-    if (!region || !areas || !Array.isArray(areas)) return null;
-    return areas.find((a) => a.region === region);
-  }, [areas, region]);
+    if (!region || !district || !city || !locationData.length) return null;
+    return locationData.find(
+      (a) => a.region === region && a.district === district && a.city === city
+    );
+  }, [locationData, region, district, city]);
 
   // ---------------- Submit ----------------
   const onSubmit = async (data) => {
@@ -137,12 +128,17 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
     const result = await BookService(bookingData);
 
     if (result.success) {
-      toast.success("Service booked successfully");
+      toast.success(
+        result.emailSuccess
+          ? "Service booked successfully. Invoice sent to your email."
+          : "Service booked successfully"
+      );
       reset();
       setRegion("");
       setDistrict("");
       setCity("");
       setArea("");
+      router.push("/my-bookings");
     } else {
       toast.error(result.message || "Booking failed");
     }

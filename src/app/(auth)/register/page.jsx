@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { ImGoogle } from "react-icons/im";
 import toast from "react-hot-toast";
@@ -11,10 +11,14 @@ import { registerUser } from "@/actions/server/auth";
 
 export default function Register() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/profile";
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
+    nid: "",
     name: "",
     email: "",
+    contact: "",
     password: "",
     confirmPassword: "",
     photo: "",
@@ -38,8 +42,11 @@ export default function Register() {
       return;
     }
 
-    if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    if (!strongPasswordRegex.test(formData.password)) {
+      toast.error(
+        "Password must be 6+ chars with at least one uppercase and one lowercase letter"
+      );
       return;
     }
 
@@ -69,7 +76,7 @@ export default function Register() {
         toast.error("Login failed. Please try logging in manually.");
         router.push("/login");
       } else {
-        router.push("/profile");
+        router.push(callbackUrl);
       }
     } catch (error) {
       console.error("Registration error:", error);
@@ -82,7 +89,7 @@ export default function Register() {
   const handleGoogleSignup = async () => {
     setIsLoading(true);
     try {
-      await signIn("google", { callbackUrl: "/profile" });
+      await signIn("google", { callbackUrl });
     } catch (error) {
       console.error("Google signup error:", error);
       toast.error("Failed to sign up with Google");
@@ -98,6 +105,22 @@ export default function Register() {
             <h1 className="text-4xl font-bold text-center mb-6">Sign Up</h1>
 
             <div className="space-y-4">
+              <div className="w-full">
+                <label className="label">
+                  <span className="label-text">NID No</span>
+                </label>
+                <input
+                  type="text"
+                  name="nid"
+                  value={formData.nid}
+                  onChange={handleInputChange}
+                  placeholder="NID number"
+                  className="input input-bordered w-full"
+                  required
+                  disabled={isLoading}
+                />
+              </div>
+
               <div className="w-full">
                 <label className="label">
                   <span className="label-text">Name</span>
@@ -124,6 +147,22 @@ export default function Register() {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="your@email.com"
+                  className="input input-bordered w-full"
+                  required
+                  disabled={isLoading}
+                />
+              </div>
+
+              <div className="w-full">
+                <label className="label">
+                  <span className="label-text">Contact Number</span>
+                </label>
+                <input
+                  type="tel"
+                  name="contact"
+                  value={formData.contact}
+                  onChange={handleInputChange}
+                  placeholder="+8801XXXXXXXXX"
                   className="input input-bordered w-full"
                   required
                   disabled={isLoading}
@@ -175,7 +214,6 @@ export default function Register() {
                   onChange={handleInputChange}
                   placeholder="https://example.com/photo.jpg"
                   className="input input-bordered w-full"
-                  required
                   disabled={isLoading}
                 />
               </div>
@@ -184,8 +222,10 @@ export default function Register() {
                 onClick={handleRegister}
                 disabled={
                   isLoading ||
+                  !formData.nid ||
                   !formData.name ||
                   !formData.email ||
+                  !formData.contact ||
                   !formData.password
                 }
                 className="btn btn-primary w-full flex items-center gap-2"
@@ -216,7 +256,10 @@ export default function Register() {
 
             <p className="text-center text-sm mt-4">
               Already have an account?{" "}
-              <Link href="/login" className="link link-primary font-semibold">
+              <Link
+                href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+                className="link link-primary font-semibold"
+              >
                 Login
               </Link>
             </p>

@@ -11,7 +11,7 @@ export const GetServiceAreas = async () => {
     region: area.region,
     district: area.district,
     city: area.city,
-    covered_area: area.covered_area,
+    covered_area: Array.isArray(area.covered_area) ? area.covered_area : [],
     status: area.status,
     flowchart: area.flowchart,
     longitude: area.longitude,

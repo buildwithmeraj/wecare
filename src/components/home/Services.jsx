@@ -19,7 +19,7 @@ const Services = () => {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {services.map((service) => (
         <div className="card bg-base-100 max-w-2xl shadow-sm" key={service._id}>
           <figure>
@@ -31,9 +31,9 @@ const Services = () => {
             <div className="card-actions justify-end">
               <Link
                 className="btn btn-primary"
-                href={`/services/${service._id}`}
+                href={`/service/${service._id}`}
               >
-                Buy Now
+                View Details
               </Link>
             </div>
           </div>

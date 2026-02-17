@@ -15,10 +15,8 @@ const Navbar = () => {
       </Link>
       <div className="flex items-center gap-2">
         <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
         <Link href="/services">Services</Link>
-        <Link href="/contact">Contact</Link>
-        <Link href="/blog">Blog</Link>
+        {session?.user && <Link href="/my-bookings">My Bookings</Link>}
       </div>
       <div>
         {session ? (

@@ -1,15 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ImGoogle } from "react-icons/im";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { FaSignInAlt } from "react-icons/fa";
 
 export default function Login() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/profile";
 
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -17,9 +19,9 @@ export default function Login() {
   // Redirect if already logged in
   useEffect(() => {
     if (status === "authenticated") {
-      router.push("/profile");
+      router.push(callbackUrl);
     }
-  }, [status, router]);
+  }, [status, router, callbackUrl]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -43,7 +45,7 @@ export default function Login() {
         toast.error("Invalid email or password");
       } else {
         toast.success("Login successful!");
-        router.push("/profile");
+        router.push(callbackUrl);
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -56,7 +58,7 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     try {
-      await signIn("google", { callbackUrl: "/profile" });
+      await signIn("google", { callbackUrl });
     } catch (error) {
       console.error("Google login error:", error);
       toast.error("Failed to login with Google");
@@ -128,7 +130,7 @@ export default function Login() {
               >
                 <FaSignInAlt />
 
-                {isLoading ? "Loggin in..." : "Login"}
+                {isLoading ? "Logging in..." : "Login"}
               </button>
             </div>
 
@@ -146,7 +148,7 @@ export default function Login() {
             <p className="text-center text-sm mt-4">
               Don&apos;t have an account?{" "}
               <Link
-                href="/register"
+                href={`/register?callbackUrl=${encodeURIComponent(callbackUrl)}`}
                 className="link link-primary font-semibold"
               >
                 Sign up

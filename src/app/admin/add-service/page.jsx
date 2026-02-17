@@ -1,5 +1,5 @@
 "use client";
-import { AddService } from "@/actions/addService";
+import { AddService } from "@/actions/server/addService";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
