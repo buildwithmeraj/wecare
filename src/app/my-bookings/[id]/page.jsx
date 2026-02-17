@@ -22,7 +22,11 @@ export default async function BookingDetailsPage({ params }) {
   const booking = await getBookingById(id, session.user.email);
 
   if (!booking) {
-    return <p className="text-center">Booking not found.</p>;
+    return (
+      <div className="hero min-h-[70vh]">
+        <p className="text-center">Booking not found.</p>
+      </div>
+    );
   }
 
   return (

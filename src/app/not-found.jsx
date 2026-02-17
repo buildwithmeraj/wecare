@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { IoHome } from "react-icons/io5";
 
 export default function NotFound() {
   return (
@@ -8,6 +9,7 @@ export default function NotFound() {
           <h1 className="text-5xl font-bold">404</h1>
           <p className="py-4">Page not found.</p>
           <Link href="/" className="btn btn-primary">
+            <IoHome />
             Return to Home
           </Link>
         </div>

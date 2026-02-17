@@ -34,7 +34,7 @@ export default function ServiceCard({ service }) {
           {featuresText}
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+        <div className="grid justify-between grid-cols-2 gap-2 mb-4">
           <div className="flex items-center gap-2">
             <FaClock className="inline mb-0.5 " />
             <p className="font-bold text-sm text-primary">
@@ -42,7 +42,7 @@ export default function ServiceCard({ service }) {
               /Hour
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex justify-end items-center gap-2">
             <FaCalendarAlt className="inline mb-0.5" />
             <p className="font-bold text-sm text-primary">
               ${service.pricePerDay}
