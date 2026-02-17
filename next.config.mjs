@@ -19,6 +19,9 @@ const nextConfig = {
       },
     ],
   },
+  // Disable static generation for dynamic auth pages
+  skipProxyUrlNormalize: true,
+  staticPageGenerationTimeout: 1000,
 };
 
 export default nextConfig;

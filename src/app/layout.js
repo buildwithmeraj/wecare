@@ -1,12 +1,9 @@
-import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import NextAuthProvider from "@/providers/NextAuthProvider";
 import { Toaster } from "react-hot-toast";
 import ThemeProvider from "@/components/utilities/ThemeProvider";
-
-const notoSans = Noto_Sans({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Care.xyz",
@@ -18,7 +15,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${notoSans.className} antialiased flex flex-col min-h-screen transition-colors`}
+        className="antialiased flex flex-col min-h-screen transition-colors font-sans"
       >
         <NextAuthProvider>
           <ThemeProvider>

@@ -1,17 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useSearchParamsSafe } from "@/hooks/useSearchParamsSafe";
 import { ImGoogle } from "react-icons/im";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { FaSignInAlt } from "react-icons/fa";
-import { useEffect } from "react";
 
 export default function LoginForm() {
   const { status } = useSession();
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParamsSafe();
   const callbackUrl = searchParams.get("callbackUrl") || "/profile";
 
   const [isLoading, setIsLoading] = useState(false);

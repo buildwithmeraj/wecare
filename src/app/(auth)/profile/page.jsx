@@ -1,9 +1,7 @@
 import ProfilePage from "@/components/ProfilePage";
 
-export const metadata = {
-  title: `Profile ${process.env.PAGE_TITLE}`,
-};
+export const dynamic = "force-dynamic";
 
-export default function Page() {
+export default function Profile() {
   return <ProfilePage />;
 }
