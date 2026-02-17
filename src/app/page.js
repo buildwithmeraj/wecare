@@ -1,5 +1,6 @@
 import Services from "@/components/home/Services";
-import Link from "next/link";
+import BannerSlider from "@/components/home/BannerSlider";
+import Testimonials from "@/components/home/Testimonials";
 
 export const metadata = {
   title: "Care.xyz | Baby Sitting & Elderly Care Services",
@@ -10,21 +11,7 @@ export const metadata = {
 export default function Home() {
   return (
     <>
-      <section className="hero bg-base-200 rounded-xl p-8 mb-8">
-        <div className="hero-content text-center">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl font-bold mb-3">Trusted Care, When Your Family Needs It</h1>
-            <p className="mb-5">
-              Care.xyz helps you find dependable babysitters, elderly caregivers,
-              and home support professionals based on your preferred time and
-              location.
-            </p>
-            <Link href="/services" className="btn btn-primary">
-              Explore Services
-            </Link>
-          </div>
-        </div>
-      </section>
+      <BannerSlider />
 
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-3">About Care.xyz</h2>
@@ -57,6 +44,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Testimonials />
     </>
   );
 }

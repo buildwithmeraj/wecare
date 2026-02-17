@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Image from "next/image";
 import Link from "next/link";
+import { FaCheck } from "react-icons/fa6";
 
 export async function generateMetadata({ params }) {
   const { service_id } = await params;
@@ -98,6 +99,7 @@ export default async function ServiceDetailsPage({ params }) {
 
             {session?.user ? (
               <Link className="btn btn-primary w-full" href={bookUrl}>
+                <FaCheck className="mt-0.5" />
                 Book Service
               </Link>
             ) : (

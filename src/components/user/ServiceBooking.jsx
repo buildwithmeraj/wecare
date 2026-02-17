@@ -5,6 +5,9 @@ import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaCheck } from "react-icons/fa6";
 
 const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
   const router = useRouter();
@@ -294,13 +297,20 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
           )}
         </div>
 
-        <button
-          className="btn btn-primary col-span-2"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? "Booking..." : "Confirm Booking"}
-        </button>
+        <div className="flex items-center justify-center gap-2 col-span-full">
+          <Link href={`/service/${serviceId}`} className="btn btn-neutral">
+            <IoMdArrowRoundBack className="mt-0.5" />
+            Go Back
+          </Link>
+          <button
+            className="btn btn-primary col-span-2"
+            type="submit"
+            disabled={loading}
+          >
+            <FaCheck />
+            {loading ? "Booking..." : "Confirm Booking"}
+          </button>
+        </div>
       </form>
     </div>
   );

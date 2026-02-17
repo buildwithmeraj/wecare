@@ -1,15 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ImGoogle } from "react-icons/im";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { FaSignInAlt } from "react-icons/fa";
-import { Suspense } from "react";
-import LoginForm from "./LoginForm";
+import { useEffect } from "react";
 
-export default function Login() {
+export default function LoginForm() {
   const { status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -18,7 +17,6 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
 
-  // Redirect if already logged in
   useEffect(() => {
     if (status === "authenticated") {
       router.push(callbackUrl);
@@ -40,8 +38,6 @@ export default function Login() {
         password: formData.password,
         redirect: false,
       });
-
-      console.log("Login result:", result);
 
       if (result?.error) {
         toast.error("Invalid email or password");
@@ -68,7 +64,6 @@ export default function Login() {
     }
   };
 
-  // Show loading spinner while session status is loading
   if (status === "loading") {
     return (
       <div className="hero min-h-[82vh] flex items-center justify-center">
@@ -131,7 +126,6 @@ export default function Login() {
                 className="btn btn-primary w-full"
               >
                 <FaSignInAlt />
-
                 {isLoading ? "Logging in..." : "Login"}
               </button>
             </div>
