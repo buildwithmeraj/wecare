@@ -19,13 +19,7 @@ export async function proxy(req) {
   }
 
   if (pathname.startsWith("/admin") && isAuth) {
-    const adminEmails = (process.env.ADMIN_EMAILS || "")
-      .split(",")
-      .map((email) => email.trim().toLowerCase())
-      .filter(Boolean);
-
-    const tokenEmail = token?.email?.toLowerCase();
-    const isAdmin = token?.role === "admin" || adminEmails.includes(tokenEmail);
+    const isAdmin = token?.role === "admin";
 
     if (!isAdmin) {
       return NextResponse.redirect(new URL("/", req.url));
@@ -39,9 +33,7 @@ export async function proxy(req) {
   ) {
     const callbackUrl = req.nextUrl.searchParams.get("callbackUrl");
     const safePath = callbackUrl.startsWith("/") ? callbackUrl : "/profile";
-    return NextResponse.redirect(
-      new URL(safePath, req.url)
-    );
+    return NextResponse.redirect(new URL(safePath, req.url));
   }
 
   return NextResponse.next();

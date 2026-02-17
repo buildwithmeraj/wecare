@@ -69,14 +69,14 @@ export default function Login() {
   // Show loading spinner while session status is loading
   if (status === "loading") {
     return (
-      <div className="hero min-h-[75vh] flex items-center justify-center">
+      <div className="hero min-h-[82vh] flex items-center justify-center">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
 
   return (
-    <div className="hero min-h-[75vh]">
+    <div className="hero min-h-[82vh]">
       <div className="hero-content flex-col w-full max-w-md">
         <div className="card w-full shadow-2xl bg-base-100">
           <div className="card-body">

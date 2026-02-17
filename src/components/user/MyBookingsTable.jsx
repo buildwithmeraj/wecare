@@ -6,10 +6,10 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 const statusClassMap = {
-  Pending: "badge badge-warning",
-  Confirmed: "badge badge-info",
-  Completed: "badge badge-success",
-  Cancelled: "badge badge-error",
+  Pending: "text-warning",
+  Confirmed: "text-info",
+  Completed: "text-success",
+  Cancelled: "text-error",
 };
 
 export default function MyBookingsTable({ initialBookings, userEmail }) {
@@ -22,8 +22,10 @@ export default function MyBookingsTable({ initialBookings, userEmail }) {
     if (result.success) {
       setBookings((prev) =>
         prev.map((booking) =>
-          booking._id === bookingId ? { ...booking, status: "Cancelled" } : booking
-        )
+          booking._id === bookingId
+            ? { ...booking, status: "Cancelled" }
+            : booking,
+        ),
       );
       toast.success("Booking cancelled");
     } else {
@@ -82,7 +84,9 @@ export default function MyBookingsTable({ initialBookings, userEmail }) {
                   }
                   onClick={() => handleCancel(booking._id)}
                 >
-                  {loadingId === booking._id ? "Cancelling..." : "Cancel Booking"}
+                  {loadingId === booking._id
+                    ? "Cancelling..."
+                    : "Cancel Booking"}
                 </button>
               </td>
             </tr>

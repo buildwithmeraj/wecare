@@ -6,10 +6,12 @@ import ThemeSwitcher from "../utilities/ThemeSwitcher";
 import { useSession } from "next-auth/react";
 import logout from "@/actions/client/Logout";
 import Image from "next/image";
-import { FaSignOutAlt, FaUserAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaUserAlt, FaTachometerAlt } from "react-icons/fa";
 
 const Navbar = () => {
   const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "admin";
+
   return (
     <div className="grid md:grid-cols-3 justify-between gap-2 py-2 px-[2%] bg-base-200 fixed top-0 left-0 right-0 z-50">
       <Link href="/">
@@ -31,6 +33,14 @@ const Navbar = () => {
             className="hover:text-primary hover:font-semibold"
           >
             My Bookings
+          </Link>
+        )}
+        {isAdmin && (
+          <Link
+            href="/admin"
+            className="hover:text-primary hover:font-semibold"
+          >
+            Dashboard
           </Link>
         )}
       </div>
@@ -56,6 +66,14 @@ const Navbar = () => {
                 tabIndex="-1"
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-36 p-2 shadow"
               >
+                {isAdmin && (
+                  <li>
+                    <Link href="/admin">
+                      <FaTachometerAlt />
+                      Dashboard
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <Link href="/profile">
                     <FaUserAlt />

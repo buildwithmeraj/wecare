@@ -32,37 +32,93 @@ export default async function ServiceDetailsPage({ params }) {
 
   const bookUrl = `/booking/${service_id}`;
   const loginUrl = `/login?callbackUrl=${encodeURIComponent(bookUrl)}`;
+  const features = Array.isArray(service.features)
+    ? service.features
+    : String(service.features || "")
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
 
   return (
-    <div className="max-w-7xl mx-auto my-6">
-      <h2 className="text-xl font-bold text-center mb-4">Service Details</h2>
+    <div className="py-8">
+      <h1 className="text-3xl font-bold mb-3">{service.name}</h1>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2 space-y-5">
+          <div className="bg-base-100 border border-base-300 rounded-2xl overflow-hidden shadow-sm">
+            <div className="relative w-full h-fit-content aspect-video bg-base-200">
+              <Image
+                src={service.image}
+                alt={service.name}
+                fill
+                priority
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1">
-        <Image
-          src={service.image}
-          alt={service.name}
-          width={0}
-          height={0}
-          sizes="100vw"
-          className="w-full h-auto rounded-lg"
-        />
-        <div>
-          <h3 className="text-lg font-semibold">{service.name}</h3>
-          <p>{service.category}</p>
-          <p>{service.description}</p>
-          <p className="font-semibold">Price (per hour): ${service.pricePerHour}</p>
-          <p className="font-semibold">Price (per day): ${service.pricePerDay}</p>
-          <p>Features: {Array.isArray(service.features) ? service.features.join(", ") : service.features}</p>
+        <div className="xl:col-span-1">
+          <div className="bg-base-100 border border-base-300 rounded-2xl p-6 shadow-sm xl:sticky xl:top-24">
+            <h2 className="text-xl font-semibold pb-4">Pricing & Booking</h2>
 
-          {session?.user ? (
-            <Link className="btn btn-primary mt-3" href={bookUrl}>
-              Book Service
-            </Link>
-          ) : (
-            <Link className="btn btn-primary mt-3" href={loginUrl}>
-              Login to Book Service
-            </Link>
-          )}
+            <div className="space-y-3 mb-6">
+              <div className="flex items-center justify-between border border-base-300 rounded-lg px-4 py-3">
+                <span className="text-base-content/70">Per Hour</span>
+                <span className="font-bold text-lg">
+                  ${service.pricePerHour}
+                </span>
+              </div>
+              <div className="flex items-center justify-between border border-base-300 rounded-lg px-4 py-3">
+                <span className="text-base-content/70">Per Day</span>
+                <span className="font-bold text-lg">
+                  ${service.pricePerDay}
+                </span>
+              </div>
+            </div>
+
+            {features.length ? (
+              <div className="flex flex-wrap gap-2 pb-3">
+                <span className="text-base-content/70 font-semibold">
+                  Features:
+                </span>
+                {features.map((feature, idx) => (
+                  <span
+                    key={`${feature}-${idx}`}
+                    className="badge badge-neutral badge-outline px-3 py-3"
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-base-content/70 pb-3">
+                No feature details provided.
+              </p>
+            )}
+
+            {session?.user ? (
+              <Link className="btn btn-primary w-full" href={bookUrl}>
+                Book Service
+              </Link>
+            ) : (
+              <Link className="btn btn-primary w-full" href={loginUrl}>
+                Login to Book Service
+              </Link>
+            )}
+          </div>
+
+          <div className="bg-base-100 border border-base-300 mt-4 rounded-2xl p-6 shadow-sm">
+            <h2 className="text-xl font-bold mb-3">Service Details</h2>
+            <p className="text-base-content/80 leading-relaxed pb-2">
+              {service.description}
+            </p>
+            <span className="text-base-content/70 font-semibold">
+              Category:
+            </span>{" "}
+            <span className="badge badge-primary badge-outline px-4 py-3">
+              {service.category}
+            </span>
+          </div>
         </div>
       </div>
     </div>

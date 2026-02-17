@@ -33,7 +33,7 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
     serviceType === "perHour" ? service.pricePerHour : service.pricePerDay;
   const totalCost = useMemo(
     () => duration * pricePerUnit,
-    [duration, pricePerUnit]
+    [duration, pricePerUnit],
   );
 
   const locationData = useMemo(() => {
@@ -49,7 +49,6 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
     }));
   }, [areas]);
 
-  // ---------------- Cascading Location Logic ----------------
   const divisions = useMemo(() => {
     if (!areas || !Array.isArray(areas)) return [];
     return [...new Set(areas.map((a) => a.region))];
@@ -65,7 +64,7 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
     if (!region || !district || !locationData.length) return [];
 
     const filtered = locationData.filter(
-      (item) => item.region === region && item.district === district
+      (item) => item.region === region && item.district === district,
     );
     return [...new Set(filtered.map((item) => item.city).filter(Boolean))];
   }, [locationData, region, district]);
@@ -77,11 +76,11 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
       (item) =>
         item.region === region &&
         item.district === district &&
-        item.city === city
+        item.city === city,
     );
     return [
       ...new Set(
-        filtered.flatMap((item) => item.covered_area || []).filter(Boolean)
+        filtered.flatMap((item) => item.covered_area || []).filter(Boolean),
       ),
     ];
   }, [locationData, region, district, city]);
@@ -89,15 +88,14 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
   const selectedLocation = useMemo(() => {
     if (!region || !district || !city || !locationData.length) return null;
     return locationData.find(
-      (a) => a.region === region && a.district === district && a.city === city
+      (a) => a.region === region && a.district === district && a.city === city,
     );
   }, [locationData, region, district, city]);
 
-  // ---------------- Submit ----------------
   const onSubmit = async (data) => {
     if (!region || !district || !city || !area) {
       toast.error(
-        "Please select full location (division, district, city, area)"
+        "Please select full location (division, district, city, area)",
       );
       return;
     }
@@ -131,7 +129,7 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
       toast.success(
         result.emailSuccess
           ? "Service booked successfully. Invoice sent to your email."
-          : "Service booked successfully"
+          : "Service booked successfully",
       );
       reset();
       setRegion("");
@@ -154,19 +152,16 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-2 gap-3 card-body"
       >
-        {/* User Email */}
         <div className="col-span-2">
           <label className="label">User Email</label>
           <input className="input w-full" value={userEmail} readOnly />
         </div>
 
-        {/* Service Name */}
         <div className="col-span-2">
           <label className="label">Service</label>
           <input className="input w-full" value={service.name} readOnly />
         </div>
 
-        {/* Service Type */}
         <div>
           <label className="label">Service Type</label>
           <select
@@ -179,7 +174,6 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
           </select>
         </div>
 
-        {/* Duration */}
         <div>
           <label className="label">
             Duration ({serviceType === "perHour" ? "Hours" : "Days"})
@@ -195,7 +189,6 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
           )}
         </div>
 
-        {/* Price */}
         <div>
           <label className="label">Price per unit</label>
           <input className="input" value={`৳${pricePerUnit}`} readOnly />
@@ -210,7 +203,6 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
           />
         </div>
 
-        {/* Division */}
         <div>
           <label className="label">Division</label>
           <select
@@ -232,7 +224,6 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
           </select>
         </div>
 
-        {/* District */}
         <div>
           <label className="label">District</label>
           <select
@@ -254,7 +245,6 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
           </select>
         </div>
 
-        {/* City */}
         <div>
           <label className="label">City</label>
           <select
@@ -275,7 +265,6 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
           </select>
         </div>
 
-        {/* Area */}
         <div>
           <label className="label">Area</label>
           <select
@@ -293,7 +282,6 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
           </select>
         </div>
 
-        {/* Full Address */}
         <div className="col-span-2">
           <label className="label">Full Address</label>
           <textarea
@@ -306,7 +294,6 @@ const ServiceBooking = ({ service, serviceId, userEmail, areas }) => {
           )}
         </div>
 
-        {/* Submit */}
         <button
           className="btn btn-primary col-span-2"
           type="submit"
